@@ -1,4 +1,4 @@
-require 'entropy'
+require 'dice'
 
 class DiceRoll
   def initialize(listener, dice_description)
@@ -9,7 +9,7 @@ class DiceRoll
   end
   
   def execute
-    results = Array.new(@times) { Entropy::from_one_to(@range_max) + @per_roll }
+    results = Dice.roll(@times, @range_max).map { |n| n + @per_roll }
     total = results.inject(&:+) + @modifier
     @listener.show_roll_result({rolls: results, total: total})
   end

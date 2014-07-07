@@ -1,4 +1,4 @@
-require 'dice_roll'
+require 'dice'
 
 class ShadowrunDice
   def initialize(listener, roll_description)
@@ -7,33 +7,17 @@ class ShadowrunDice
   end
   
   def execute
-    @all_rolls = []
-    DiceRoll.new(self, {sides: 6, rolls: @pool}).execute
-  end
-
-  def show_roll_result(results)
-    @all_rolls += results[:rolls]
-    show_results unless rolled_edge? results[:rolls]
+    show(@edge ? Dice.explode(@pool, 6) : Dice.roll(@pool, 6))
   end
 
   
   private
-
-  def rolled_edge?(rolls)
-    sixes = rolls.count 6
-    if @edge && sixes > 0
-      DiceRoll.new(self, {sides: 6, rolls: sixes}).execute
-      return true
-    else
-      return false
-    end
-  end
-
-  def show_results
-    hits = calc_hits(@all_rolls)
-    glitch = was_glitch?(@all_rolls)
+  
+  def show(rolls)
+    hits = calc_hits rolls
+    glitch = was_glitch? rolls
     hit_results = {
-      rolls: @all_rolls,
+      rolls: rolls,
       hits: hits,
       glitch?: glitch,
       critical_glitch?: glitch && hits <= 0
@@ -42,6 +26,7 @@ class ShadowrunDice
   end
 
   def calc_hits(rolls)
+    puts "This is the calc_hits thing: #{rolls.to_s}"
     (rolls.select { |r| r >= 5 }).length
   end
 
