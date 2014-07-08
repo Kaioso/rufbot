@@ -56,7 +56,7 @@ class HeroDamage
   end
 
   def get_knockback(body)
-    (body - Dice.roll(2, 6).inject(&:+)) * 2
+    (body - Dice.roll_for_total(2, 6)) * 2
   end
 
   def staggered?(knock_back)

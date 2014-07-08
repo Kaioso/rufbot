@@ -17,4 +17,8 @@ module Dice
     end
     return rolls.flatten
   end
+
+  def Dice.roll_for_total(times, sides)
+    Dice.roll(times, sides).inject(&:+)
+  end
 end
