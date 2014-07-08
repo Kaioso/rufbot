@@ -13,12 +13,11 @@ class WildDice
     modified_rolls = rolls.map { |n| n + @modifier }
     modified_wild = wild + @modifier
 
-    result = drop_lowest(modified_rolls, modified_wild)
     results = {
       rolls: modified_rolls,
       wild: modified_wild,
       bust?: rolls.count(1) > 0 && wild == 1,
-      result: result
+      result: drop_lowest(modified_rolls, modified_wild)
     }
     @listener.show_roll_result results
   end

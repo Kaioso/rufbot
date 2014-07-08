@@ -26,7 +26,6 @@ class ShadowrunDice
   end
 
   def calc_hits(rolls)
-    puts "This is the calc_hits thing: #{rolls.to_s}"
     (rolls.select { |r| r >= 5 }).length
   end
 
