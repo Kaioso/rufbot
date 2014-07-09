@@ -2,6 +2,7 @@ require 'entropy'
 
 module Dice
   def Dice.roll(times, sides)
+    return [] if times < 1
     Array.new(times) { Entropy::from_one_to sides }
   end
 
