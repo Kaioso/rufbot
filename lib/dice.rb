@@ -22,4 +22,8 @@ module Dice
   def Dice.roll_for_total(times, sides)
     Dice.roll(times, sides).inject(&:+)
   end
+
+  def Dice.roll_single(sides)
+    Dice.roll(1, sides)[0]
+  end
 end

@@ -1,16 +1,33 @@
 require 'rspec'
 require 'entropy'
+require 'dice_test_helpers'
 require 'random_aarn_race'
 
-RSpec.describe RandomAarnRace do
-  before :each do
-    Entropy::RANDOMIZER = RandomFake.new
-    @listener = AarnRaceListenerFake.new
+class AarnRaceListenerFake
+  attr_reader :race
+  def initialize
+    @race = ''
+  end
+  
+  def your_race_is(race)
+    @race = race
+  end
+end
+
+RSpec.describe AarnRace do
+  it 'uses to_s to output the race it was created with' do
+    expect(AarnRace.new("Human").to_s).to eq("Human")
   end
 
-  it 'selects a name from a list of names based on a dice roll' do
+  it 'allows embedding of suffixes and selects one' do
+    Entropy::RANDOMIZER = RandomFake.new
     Entropy::RANDOMIZER.return_chain = [0]
-    RandomAarnRace.new(@listener).execute
-    expect(@listener.name).to eq("")
+    expect(AarnRace.new('Jerolan %{random}', ["Human"]).to_s).to eq("Jerolan Human")
+  end
+
+  it 'selects those suffixes randomly' do
+    Entropy::RANDOMIZER = RandomFake.new
+    Entropy::RANDOMIZER.return_chain = [1]
+    expect(AarnRace.new('Jerolan %{random}', ["Human", "Ardlin"]).to_s).to eq("Jerolan Ardlin")
   end
 end
